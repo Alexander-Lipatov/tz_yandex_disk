@@ -1,0 +1,22 @@
+{% load static %}
+{% load livereload_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static './css/style.css' %}" />
+    {% livereload_script %}
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div class="main-container">
+        <aside class="left-bar">123</aside>
+        {% block content %}{% endblock content %}
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>
