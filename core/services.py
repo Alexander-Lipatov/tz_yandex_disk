@@ -3,9 +3,6 @@ import requests
 from datetime import datetime
 from typing import List
 from urllib.parse import urlencode
-import json
-
-
 
 
 class ItemStorage:
@@ -21,13 +18,8 @@ class File(ItemStorage):
         self.size = size
         
     
-
 class Folder(ItemStorage):
     type='dir'
-    
-        
-
-
 
 
 class FileStorage:
@@ -36,12 +28,9 @@ class FileStorage:
         self.name_folder = name_folder
         self.items:List[ItemStorage] = []
 
-    def add_items(self, item:ItemStorage):
+    def _add_items(self, item:ItemStorage):
         self.items.append(item)
         return item
-
-
-
 
 
 class YandexDisk:
@@ -49,22 +38,21 @@ class YandexDisk:
     # token = 'OAuth y0_AgAAAAA6BJxfAAyIDAAAAAESz4GxAAAO2KwV1E1FhJPDeCgI2QW_YImGdw'
     public_url = 'https://cloud-api.yandex.net/v1/disk/public/resources?'
     headers = {'Content-Type': 'application/json', 'Accept': 'application/json'} 
-    
-    def get_meta(self, public_key):
-        return self.get_folder_contents(public_key, '')
-    
+
+    def generate_url(self, key:str, path: str):
+        params = dict(public_key=key, limit=500)
+        if path:
+            params['path'] = '/' + path
+
+        url = self.public_url + urlencode(params)
+        return url
 
     def get_folder_contents(self, public_key, path=''):
 
-        params = dict(public_key=public_key, limit=500)
-        if path:
-            params['path'] = '/' + path
-            
-        
-        final_url = self.public_url + urlencode(params)
+        url = self.generate_url(public_key, path)
 
         try:
-            response = requests.get(final_url, headers=self.headers)
+            response = requests.get(url, headers=self.headers)
             response.raise_for_status()
             data = response.json()
         except requests.exceptions.RequestException as e:
@@ -77,15 +65,9 @@ class YandexDisk:
         for item in data["_embedded"]['items']:
             try:
                 name = item.get('name', None)
-                size = item.get('size', None)  # Если нет размера, ставим 0
+                size = item.get('size', None)
                 created = datetime.fromisoformat(item['created']) if 'created' in item else None
-                item_type = item.get('type', 'unknown')  # Может быть "file" или "dir"
-
-                # Если это файл, мы добавляем ссылку для скачивания
-                # download_url = item.get('file') if item_type == 'file' else None
-
-                # Создаем объект ItemStorage и добавляем в FileStorage
-                
+                item_type = item.get('type', None)
 
                 match item_type:
                     case 'file':
@@ -97,7 +79,7 @@ class YandexDisk:
                         continue
                     
                     
-                storage.add_items(item)
+                storage._add_items(item)
             except Exception as e:
                 print(f"Ошибка при обработке элемента: {e}")
 
