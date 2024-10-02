@@ -58,7 +58,7 @@ class YandexDisk:
 
         params = dict(public_key=public_key, limit=500)
         if path:
-            params['path'] = path
+            params['path'] = '/' + path
             
         
         final_url = self.public_url + urlencode(params)

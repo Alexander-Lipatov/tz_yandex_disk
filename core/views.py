@@ -34,7 +34,7 @@ def area_folder_view(requers:HttpRequest, uuid, path:str):
     public_link = requers.COOKIES.get(uuid)
     try:
         
-        data = yd.get_folder_contents(public_link, '/'+ path)
+        data = yd.get_folder_contents(public_link, path)
         if data is None:
             raise BadRequest
         return render(requers, './area_folder.html', {'data': data, 'uuid':uuid, 'path':path})
