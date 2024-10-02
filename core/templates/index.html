@@ -1,46 +1,15 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
 
-<div class="content-area">
-  <h2>All File</h2>
-  <button class="button">+ New</button>
-  <form action="" method="post">
-    {% csrf_token %} {{ form }}
-    <input type="submit" value="Submit" />
-  </form>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Size</th>
-        <th>Created</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in data.items %}
-      <tr>
-        <td class="name-column">
-          <i class="folder-icon">📁</i>{{item.name | truncatechars:35}}
-        </td>
-        <td>{{item.size}}</td>
-        <td>{{item.created}}</td>
-        <td><i class="action-icon">⋮</i></td>
-      </tr>
+{% block content %}
 
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% comment %}
-<div class="link-form">
-  {% for item in data.items %}
-  <div>
-    <p>{{item.name}}</p>
-    <p>{{item.size}}</p>
-    <p>{{item.type}}</p>
-    <p>{{item.created}}</p>
-  </div>
+    <div class="form-block">
+        <h1>
+            Введите ссылки на публичную папку YandexDisk
+        </h1>
+        <form action="" method="post">
+            {% csrf_token %} {{ form.public_link }}
+            <input type="submit" value="Submit" />
+          </form>
+    </div>
 
-  {% endfor %}
-</div>
-{% endcomment %} {% endblock content %}
+{% endblock content %}

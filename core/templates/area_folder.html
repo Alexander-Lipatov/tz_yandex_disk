@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block content %} {% load tz %}
+<div class="content-area">
+  <div class="header-area">
+    <a class="button" href="/">Главная</a>
+
+    <h2>Все файлы</h2>
+    <div style="display: flex; gap: 10px">
+      <a href="/" class="button">Скачать всё</a>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Имя</th>
+        <th>Размер</th>
+        <th>Дата</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in data.items %}
+      <tr>
+        <td><input type="checkbox" name="" id=""></td>
+        <td class="name-column">
+          <i class="folder-icon">📁</i>
+          {% if item.type == 'dir' %}
+          <a href="{% url 'folder' uuid path|add:item.name|add:'/' %}">{{item.name | truncatechars:35}}</a>
+          {% else %} {{item.name }} {% endif %}
+        </td>
+        <td>
+          {% if item.size %}
+          {{item.size|filesizeformat }}
+          {% endif %}
+          
+          </td>
+        <td>{{item.created | date:"d M Y H:i"}}</td>
+        <td><i class="action-icon">⋮</i></td>
+      </tr>
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}
