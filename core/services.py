@@ -63,6 +63,7 @@ class YandexDisk:
 
 
         for item in data["_embedded"]['items']:
+            item:dict
             try:
                 name = item.get('name', None)
                 size = item.get('size', None)
