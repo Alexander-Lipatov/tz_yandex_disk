@@ -17,26 +17,29 @@ def index(request:HttpRequest):
     if request.method == 'POST':
         form = EnterPublicLink(request.POST)
         if form.is_valid():
-            public_link = form.cleaned_data['public_link']
-            unique_id = str(uuid.uuid4())
-            response = HttpResponsePermanentRedirect(reverse('folder', kwargs={'uuid':unique_id, 'path':''}))
-            response.cookies[unique_id]=public_link
+            public_link:str = form.cleaned_data['public_link']
+            if public_link[-1] == '/':
+                public_link = public_link[:-1]
+            
+            key = public_link.split('/')[-1] 
+            response = HttpResponsePermanentRedirect(reverse('folder', kwargs={'id':key, 'path':''}))
+            
             
             return response
     else:
         form = EnterPublicLink()
         return render(request, './index.html', {'form':form})
     
-def area_folder_view(requers:HttpRequest, uuid, path:str):
+def area_folder_view(requers:HttpRequest, id, path:str):
 
     yd = YandexDisk()
 
-    public_link = requers.COOKIES.get(uuid)
+    public_link = f'https://disk.yandex.ru/d/{id}'
     try:
         data = yd.get_folder_contents(public_link, path)
         if data is None:
             raise BadRequest
-        return render(requers, './area_folder.html', {'data': data, 'uuid':uuid, 'path':path})
+        return render(requers, './area_folder.html', {'data': data, 'id':id, 'path':path})
 
     except BadRequest:
         return HttpResponseNotFound('Page not found')

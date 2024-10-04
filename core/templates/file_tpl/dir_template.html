@@ -8,7 +8,7 @@
         class="folder-icon"
         width="48"
       />
-      <a href="{% url 'folder' uuid path|add:item.name|add:'/' %}">
+      <a href="{% url 'folder' id path|add:item.name|add:'/' %}">
         {{item.name | truncatechars:35}}</a
       >
       
