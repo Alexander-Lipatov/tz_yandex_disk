@@ -1,0 +1,33 @@
+{% load static %}
+<tr>
+  <td>
+    <input
+      type="checkbox"
+      name="{{data.public_key}}"
+      value="{{item.path}}"
+      id=""
+    />
+  </td>
+
+  <td class="name-column">
+    <img src="{% static "./img/icon/icon_file.svg" %}" class="folder-icon"
+    width="48" />
+    <span>{{item.name }}</span>
+  </td>
+
+  <td>{{item.size|filesizeformat }}</td>
+
+  <td>{{item.created | date:"d M Y H:i"}}</td>
+
+  <td>
+    <form method="post" action="/download/">
+      {% csrf_token %}
+      <input type="hidden" name="name" value="{{ item.name }}" />
+      <input type="hidden" name="path" value="{{ item.path }}" />
+      <input type="hidden" name="public_key" value="{{ data.public_key }}" />
+      <button>
+        <img src="{% static "./img/icon/icon_download.svg" %}" alt="">
+      </button>
+    </form>
+  </td>
+</tr>

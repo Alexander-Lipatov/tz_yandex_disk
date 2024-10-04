@@ -51,7 +51,7 @@ main {
 }
 
 .content-area {
-  max-width: 1000px;
+  max-width: 1500px;
   padding: 20px;
   flex: 1;
   display: flex;
@@ -103,6 +103,7 @@ th {
 .name-column {
   display: flex;
   align-items: center;
+  gap:15px;
 }
 
 .name-column i {
