@@ -2,6 +2,13 @@
 
 const btn = document.getElementById('checked_download') 
 
+const checkboxAll = document.getElementById('checked-all')
+
+checkboxAll.addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('input.checked-file')
+    checkboxes.forEach(cb => cb.checked = checkboxAll.checked)
+})
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -19,7 +26,7 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 
 btn.addEventListener('click', function() {
-    let allCheckbox = document.querySelectorAll('input[type="checkbox"]:checked')
+    let allCheckbox = document.querySelectorAll('input.checked-file:checked')
     const selectedValues = Array.from(allCheckbox).map(cb => cb.value);
     
     const data = {
