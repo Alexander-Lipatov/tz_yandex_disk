@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% load static %} {% block content %} {% load tz %}
+<div class="content-area">
+  <div class="header-area">
+    <a class="button" href="/">Главная</a>
+
+    <h2>Все файлы</h2>
+    <div style="display: flex; gap: 10px">
+      <button id='checked_download' type="button">Скачать</button>
+      <a href="/" class="button">Скачать всё</a>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Имя</th>
+        <th>Размер</th>
+        <th>Дата</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in data.items %}
+      {% if item.type == 'dir' %}
+      {% include "./file_tpl/dir_template.html" %}
+      {% else %}
+      {% include "./file_tpl/file_template.html" %}
+      
+      {% endif %}
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}
+
+{% block download_zip %}
+<script src="{% static './js/download_zip.js' %}"></script>
+{% endblock download_zip %}

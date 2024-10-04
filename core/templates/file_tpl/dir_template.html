@@ -1,0 +1,22 @@
+{% load static %}
+<tr>
+    <td></td>
+    <td class="name-column">
+      
+      <img
+        src='{% static "./img/icon/icon_dir.svg" %}'
+        class="folder-icon"
+        width="48"
+      />
+      <a href="{% url 'folder' id path|add:item.name|add:'/' %}">
+        {{item.name | truncatechars:35}}</a
+      >
+      
+    </td>
+    <td>{% if item.size %} {{item.size|filesizeformat }} {% endif %}</td>
+    <td>{{item.created | date:"d M Y H:i"}}</td>
+    <td>
+      
+    </td>
+  </tr>
+  

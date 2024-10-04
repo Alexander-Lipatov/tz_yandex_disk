@@ -1,0 +1,157 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  flex: 1;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.left-bar {
+  width: 15%;
+  border-right: 1px gray solid;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 20px;
+}
+
+.left-bar > h2 {
+  margin-top: 50px;
+}
+.left-bar > .stories {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 75px 0;
+}
+
+.left-bar > .stories > span {
+  color: rgb(168, 168, 168);
+  font-size: 14px;
+}
+
+.content-area {
+  max-width: 1500px;
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.content-area > .header-area{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.folder-icon {
+  color: #f9bf03;
+}
+
+.file-icon {
+  color: #6d82f5;
+}
+
+.image-icon {
+  color: #ff6b6b;
+}
+
+.action-icon {
+  color: #aaa;
+}
+
+.name-column {
+  display: flex;
+  align-items: center;
+  gap:15px;
+}
+
+.name-column i {
+  margin-right: 8px;
+}
+
+a{
+  text-decoration: none;
+}
+
+.button {
+  background-color: #1284ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+}
+
+.header-area .button:hover{
+  background-color: #005fc5;
+}
+
+.form-block{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.form-block h1{
+  font-size: 24px;
+}
+.form-block>form>input[type='text']{
+  width: 250px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+}
+
+.form-block>form>input[type='submit']{
+  background-color: #1284ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="form-block">
+        <h1>
+            Введите ссылки на публичную папку YandexDisk
+        </h1>
+        <form action="" method="post">
+            {% csrf_token %} {{ form.public_link }}
+            <input type="submit" value="Submit" />
+          </form>
+    </div>
+
+{% endblock content %}
