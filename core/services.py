@@ -27,10 +27,11 @@ class Folder(ItemStorage):
 
 class FileStorage:
 
-    def __init__(self, name_folder, public_key):
+    def __init__(self, name_folder, public_key, path):
         self.name_folder = name_folder
         self.items: List[ItemStorage] = []
         self.public_key = public_key
+        self.path = path
 
     def _add_items(self, item: ItemStorage):
         self.items.append(item)
@@ -67,7 +68,9 @@ class YandexDisk:
             print(f'Ошиюка при запросе данных: {e}')
             return None
         storage = FileStorage(
-            name_folder=data['name'], public_key=data['public_key'])
+            name_folder=data['name'], 
+            public_key=data['public_key'],
+            path=data['path'])
 
         for item in data["_embedded"]['items']:
             item: dict
@@ -108,11 +111,7 @@ class YandexDisk:
 
     def get_url_on_zip(self, pk: str, list_path: list):
         try:
-            list_files = []
-
-            # Формируем список файлов
-            for path in list_path:
-                list_files.append(f'{pk}:{path}')
+            list_files = [f'{pk}:{path}' for path in list_path]
 
             # Копируем данные и добавляем список файлов
             init_data = download_zip.dict_params.copy()
@@ -132,7 +131,9 @@ class YandexDisk:
 
             # Проверяем успешность запроса
             if response.status_code != 200:
-                return f"Ошибка API: Код статуса {response.status_code}"
+                if response.json()['wrongSk']:
+                    download_zip.dict_params['sk'] = response.json()['newSk']
+                    return self.get_url_on_zip(pk, list_path)           
 
             # Попробуем получить данные из ответа
             response_data = response.json()
