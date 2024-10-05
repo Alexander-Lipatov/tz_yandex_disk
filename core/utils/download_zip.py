@@ -60,7 +60,7 @@ headers = {
 
 
 dict_params = {
-        "sk": "u65fda96044586e15c2613e29a8b80cd0",
+        "sk": "",
         "uid": "973380703",
         "items": [],
     }

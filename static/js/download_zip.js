@@ -3,11 +3,24 @@
 const btn = document.getElementById('checked_download') 
 
 const checkboxAll = document.getElementById('checked-all')
+const checkboxFiles = document.querySelectorAll('input.checked-file')
 
 checkboxAll.addEventListener('change', function() {
-    const checkboxes = document.querySelectorAll('input.checked-file')
-    checkboxes.forEach(cb => cb.checked = checkboxAll.checked)
+    checkboxFiles.forEach(cb => cb.checked = checkboxAll.checked)
 })
+
+checkboxFiles.forEach(cb => cb.addEventListener('change', function() {
+    const checkboxChecked = document.querySelectorAll('input.checked-file:checked')
+    if (checkboxChecked.length > 0 ){
+        console.log(checkboxChecked.length)
+
+        btn.disabled = false
+    }else{
+        btn.disabled=true
+    }
+
+    
+}))
 
 function getCookie(name) {
     let cookieValue = null;

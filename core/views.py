@@ -80,6 +80,7 @@ def download_zip(request: HttpRequest):
             zip_url = yd.get_url_on_zip(pk, list_path)
 
             if zip_url:
+                print(zip_url)
                 # Перенаправляем на ссылку для скачивания архива
                 return JsonResponse(zip_url)
             else:

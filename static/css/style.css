@@ -123,7 +123,22 @@ a{
   float: right;
 }
 
-.header-area .button:hover{
+.button:disabled,
+.button[disabled]{
+  background-color: #919191;
+  cursor: default;
+}
+
+.button:disabled:hover,
+.button[disabled]:hover{
+  background-color: #919191;
+  cursor: default;
+}
+
+
+
+
+.button:hover{
   background-color: #005fc5;
 }
 
