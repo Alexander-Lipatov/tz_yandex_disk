@@ -1,9 +1,10 @@
 
 import requests
 from datetime import datetime
-from typing import List
 from urllib.parse import urlencode
-from .utils import download_zip
+from typing import List
+
+from .download_zip import dict_params, dict_to_json, json_to_url, cookies, headers
 
 
 class ItemStorage:
@@ -40,12 +41,12 @@ class FileStorage:
 
 class YandexDisk:
 
-    # token = 'OAuth y0_AgAAAAA6BJxfAAyIDAAAAAESz4GxAAAO2KwV1E1FhJPDeCgI2QW_YImGdw'
     public_url = 'https://cloud-api.yandex.net/v1/disk/public/resources?'
-    headers = {'Content-Type': 'application/json',
-               'Accept': 'application/json'}
     download_url = 'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
     download_zip_url = "https://disk.yandex.ru/public/api/bulk-download-url"
+
+    headers = {'Content-Type': 'application/json',
+               'Accept': 'application/json'}
 
     def generate_url(self, key: str, path: str):
         params = dict(public_key=key, limit=500)
@@ -53,7 +54,7 @@ class YandexDisk:
             params['path'] = '/' + path
 
         url = self.public_url + urlencode(params)
-
+        print(url)
         return url
 
     def get_folder_contents(self, public_key, path=''):
@@ -67,6 +68,7 @@ class YandexDisk:
         except requests.exceptions.RequestException as e:
             print(f'Ошиюка при запросе данных: {e}')
             return None
+        
         storage = FileStorage(
             name_folder=data['name'], 
             public_key=data['public_key'],
@@ -113,46 +115,37 @@ class YandexDisk:
         try:
             list_files = [f'{pk}:{path}' for path in list_path]
 
-            # Копируем данные и добавляем список файлов
-            init_data = download_zip.dict_params.copy()
+            init_data = dict_params.copy()
             init_data['items'] = list_files
 
-            # Преобразуем данные в JSON и затем в формат запроса
-            json_data = download_zip.dict_to_json(init_data)
-            data = download_zip.json_to_url(json_data)
+            json_data = dict_to_json(init_data)
+            data = json_to_url(json_data)
 
-            # Выполняем POST-запрос
             response = requests.post(
                 self.download_zip_url,
-                cookies=download_zip.cookies,
-                headers=download_zip.headers,
+                cookies=cookies,
+                headers=headers,
                 data=data
             )
 
-            # Проверяем успешность запроса
             if response.status_code != 200:
                 if response.json()['wrongSk']:
-                    download_zip.dict_params['sk'] = response.json()['newSk']
+                    dict_params['sk'] = response.json()['newSk']
                     return self.get_url_on_zip(pk, list_path)           
 
-            # Попробуем получить данные из ответа
             response_data = response.json()
 
-            # Проверяем, есть ли ключ 'data' в ответе
             if 'data' not in response_data:
                 return "Ошибка API: Ответ не содержит 'data'"
 
-            # Возвращаем ссылку на ZIP-файл
             return response_data['data']
 
         except requests.exceptions.RequestException as e:
-            # Обработка ошибок, связанных с запросом
             return f"Ошибка при выполнении запроса: {str(e)}"
 
         except ValueError:
-            # Обработка ошибок при преобразовании в JSON
             return "Ошибка при декодировании ответа API"
 
         except KeyError:
-            # Обработка случаев, когда в ответе нет ожидаемых ключей
             return "Ошибка: Некорректный формат ответа от API"
+
