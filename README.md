@@ -31,6 +31,6 @@ python manage.py runserver
 - Реализована загрузка определенных файлов:
   Пользователь имеет возможность выбирать файлы из списка и загружать их на свой компьютер через интерфейс веб-приложения.
 
-```
+
 ### Автор:
 - Липатов Александр (ТГ [@Lipatov1993](https://t.me/lipatov1993), GitHub [Alexander-Lipatov](https://github.com/Alexander-Lipatov)
