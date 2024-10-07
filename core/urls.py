@@ -5,7 +5,6 @@ urlpatterns = [
     path('', index, name='index'),
     path("download/", download_file , name="download"),
     path("download_zip/", download_zip , name="download_zip"),
-    # path('<str:uuid>/', area_folder_view, name='folder')
     re_path(r'^(?P<id>[a-zA-Z0-9]+)/(?P<path>.*)?/?$', area_folder_view, name='folder'),
 
 ]

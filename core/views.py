@@ -1,14 +1,20 @@
-import uuid 
 import requests
+import json
 from urllib.parse import quote
-from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponsePermanentRedirect, HttpResponseNotFound, FileResponse, HttpResponse,HttpResponseRedirect, JsonResponse
+
+from django.shortcuts import render
+from django.http import (
+    HttpRequest, 
+    HttpResponsePermanentRedirect, 
+    HttpResponseNotFound, 
+    HttpResponse,
+    HttpResponseRedirect, 
+    JsonResponse)
+from django.core.cache import cache
 from django.core.exceptions import BadRequest
 from django.urls import reverse
-from .services import YandexDisk
 
-import json
-
+from .utils.services import YandexDisk
 from .forms import EnterPublicLink
 
 
@@ -30,19 +36,28 @@ def index(request:HttpRequest):
         form = EnterPublicLink()
         return render(request, './index.html', {'form':form})
     
-def area_folder_view(requers:HttpRequest, id, path:str):
+def area_folder_view(request:HttpRequest, id, path:str):
 
     yd = YandexDisk()
 
     public_link = f'https://disk.yandex.ru/d/{id}'
     try:
-        data = yd.get_folder_contents(public_link, path)
-        if data is None:
-            raise BadRequest
-        return render(requers, './area_folder.html', {'data': data, 'id':id, 'path':path})
+        cache_data = cache.get(public_link + path)
+        if cache_data:
+            
+            data = cache_data
+        else:
+            data = yd.get_folder_contents(public_link, path)
+            if data is None:
+                raise BadRequest
+            cache.set(public_link + path, data, timeout=60*5)
+        return render(request, './area_folder.html', {'data': data, 'id':id, 'path':path})
 
     except BadRequest:
         return HttpResponseNotFound('Page not found')
+    
+    except Exception as e:
+        return HttpResponse(f"Ошибка при получении информации о папке: {e}", status=500)
     
 
 
